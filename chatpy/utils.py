@@ -4,7 +4,11 @@
 
 from datetime import datetime
 import time
-import htmlentitydefs
+try:
+    import htmlentitydefs
+except ImportError:
+    import htmllib.entities as htmlentitydefs # python 3+
+
 import re
 import locale
 from urllib import quote
