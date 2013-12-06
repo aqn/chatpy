@@ -1,5 +1,5 @@
 # Tweepy
-# Copyright 2009-2010 Joshua Roesslein
+# Copyright 2013 aqn
 # See LICENSE for details.
 
 import urllib
