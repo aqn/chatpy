@@ -2,8 +2,6 @@
 # Copyright 2009-2010 Joshua Roesslein
 # See LICENSE for details.
 
-from chatpy.utils import parse_datetime, parse_html_value, parse_a_href
-
 
 class ResultSet(list):
     """A list like object that holds results from a Twitter API query."""

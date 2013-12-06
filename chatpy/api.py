@@ -29,28 +29,24 @@ class API(object):
     """ GET /me """
     me = bind_api(
         path='/me',
-        payload_type='account',
-        require_auth=True
+        payload_type='account'
     )
 
     """ GET /my/status """
     status = bind_api(
         path='/my/status',
-        payload_type='status',
-        require_auth=True
+        payload_type='status'
     )
 
     """ GET /my/tasks """
     tasks = bind_api(
         path='/my/tasks',
         payload_type='task', payload_list=True,
-        require_auth=True
     )
 
     """ GET /rooms """
     rooms = bind_api(
         path='/rooms',
         payload_type='room', payload_list=True,
-        require_auth=True
     )
 

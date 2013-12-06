@@ -2,15 +2,14 @@
 # Copyright 2009-2010 Joshua Roesslein
 # See LICENSE for details.
 
-import httplib
 import urllib
 import time
 import re
-from StringIO import StringIO
-import gzip
+
+import requests
+from requests.utils import to_native_string
 
 from chatpy.error import ChatpyError
-from chatpy.utils import convert_to_utf8_str
 from chatpy.models import Model
 
 re_path_template = re.compile('{\w+}')
@@ -25,7 +24,7 @@ def bind_api(**config):
         payload_list = config.get('payload_list', False)
         allowed_param = config.get('allowed_param', [])
         method = config.get('method', 'GET')
-        require_auth = config.get('require_auth', False)
+        require_auth = config.get('require_auth', True)
         use_cache = config.get('use_cache', True)
 
         def __init__(self, api, args, kargs):
@@ -66,7 +65,7 @@ def bind_api(**config):
                     continue
 
                 try:
-                    self.parameters[self.allowed_param[idx]] = convert_to_utf8_str(arg)
+                    self.parameters[self.allowed_param[idx]] = to_native_string(arg, "utf8")
                 except IndexError:
                     raise ChatpyError('Too many parameters supplied!')
 
@@ -76,7 +75,7 @@ def bind_api(**config):
                 if k in self.parameters:
                     raise ChatpyError('Multiple values for parameter %s supplied!' % k)
 
-                self.parameters[k] = convert_to_utf8_str(arg)
+                self.parameters[k] = to_native_string(arg, "utf8")
 
         def build_path(self):
             for variable in re_path_template.findall(self.path):
@@ -96,9 +95,7 @@ def bind_api(**config):
 
         def execute(self):
             # Build the request URL
-            url = self.api_root + self.path
-            if len(self.parameters):
-                url = '%s?%s' % (url, urllib.urlencode(self.parameters))
+            url = self.scheme + self.host + self.api_root + self.path
 
             # Query the cache if one is available
             # and this request uses a GET method.
@@ -121,10 +118,6 @@ def bind_api(**config):
             retries_performed = 0
             while retries_performed < self.retry_count + 1:
                 # Open connection
-                if self.api.secure:
-                    conn = httplib.HTTPSConnection(self.host, timeout=self.api.timeout)
-                else:
-                    conn = httplib.HTTPConnection(self.host, timeout=self.api.timeout)
 
                 # Apply authentication
                 if self.api.auth:
@@ -137,18 +130,27 @@ def bind_api(**config):
                 if self.api.compression:
                     self.headers['Accept-encoding'] = 'gzip'
 
+                options = {
+                    'timeout': self.api.timeout,
+                    'headers': self.headers,
+                    'data': self.post_data,
+                    'params': self.parameters
+                }
                 # Execute request
                 try:
-                    conn.request(self.method, url, headers=self.headers, body=self.post_data)
-                    resp = conn.getresponse()
-                except Exception, e:
+
+                    resp = requests.request(self.method, url, **options)
+
+                except Exception as e:
                     raise ChatpyError('Failed to send request: %s' % e)
 
                 # Exit request loop if non-retry error code
                 if self.retry_errors:
-                    if resp.status not in self.retry_errors: break
+                    if resp.status_code not in self.retry_errors:
+                        break
                 else:
-                    if resp.status == 200: break
+                    if resp.status_code == 200:
+                        break
 
                 # Sleep before retrying request again
                 time.sleep(self.retry_delay)
@@ -156,7 +158,7 @@ def bind_api(**config):
 
             # If an error was returned, throw an exception
             self.api.last_response = resp
-            if resp.status != 200:
+            if resp.status_code != 200:
                 try:
                     error_msg = self.api.parser.parse_error(resp.read())
                 except Exception:
@@ -164,16 +166,8 @@ def bind_api(**config):
                 raise ChatpyError(error_msg, resp)
 
             # Parse the response payload
-            body = resp.read()
-            if resp.getheader('Content-Encoding', '') == 'gzip':
-                try:
-                    zipper = gzip.GzipFile(fileobj=StringIO(body))
-                    body = zipper.read()
-                except Exception, e:
-                    raise ChatpyError('Failed to decompress data: %s' % e)
-            result = self.api.parser.parse(self, body)
 
-            conn.close()
+            result = self.api.parser.parse(self, resp.text)
 
             # Store result into cache if one is available.
             if self.use_cache and self.api.cache and self.method == 'GET' and result:
