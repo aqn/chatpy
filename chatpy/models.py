@@ -2,6 +2,7 @@
 # Copyright 2009-2010 Joshua Roesslein
 # See LICENSE for details.
 
+import datetime
 
 class ResultSet(list):
     """A list like object that holds results from a Twitter API query."""
@@ -91,6 +92,10 @@ class Room(Model):
         room = cls(api)
 
         for k, v in json.items():
+            if k == 'last_update_time':
+                utc_time = datetime.datetime.utcfromtimestamp(v)
+                setattr(room, k, utc_time)
+            else:
                 setattr(room, k, v)
         return room
 

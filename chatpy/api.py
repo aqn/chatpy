@@ -50,3 +50,17 @@ class API(object):
         payload_type='room', payload_list=True,
     )
 
+    """ GET /rooms/{room_id} """
+    get_room = bind_api(
+        path='/rooms/{room_id}',
+        payload_type='room',
+        allowed_param=['room_id']
+    )
+
+    """ POST /rooms/{room_id}/messages """
+    post_message = bind_api(
+        path='/rooms/{room_id}/messages',
+        method='POST',
+        allowed_param=['room_id', 'body']
+    )
+
