@@ -1,4 +1,4 @@
-from config import chatwork_token
+from .config import chatwork_token
 
 from chatpy.api import API
 from chatpy.auth import TokenAuthHandler
