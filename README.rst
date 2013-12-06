@@ -2,7 +2,8 @@
 Chatpy: Chatwork API for Python
 *******************************
 
-.. image:: https://travis-ci.org/aqn/chatpy.png?branch=master   :target: https://travis-ci.org/aqn/chatpy
+.. image:: https://travis-ci.org/aqn/chatpy.png?branch=master
+    :target: https://travis-ci.org/aqn/chatpy
 
 Chatpy is a `Chatwork API`_ Library which strongly inspired by Tweepy_.
 
