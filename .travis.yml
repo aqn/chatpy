@@ -1,0 +1,10 @@
+language: python
+python:
+- '2.6'
+- '2.7'
+- '3.3'
+install: pip install -r requirements.txt
+script: nosetests -v -w tests/  --with-cov --cov chatpy --cov-report term-missing
+env:
+  global:
+    secure: EmebfaDFtjmg/AQjI4d6h19DCKfoqjajsXqr0tCunqcbcjvV+1Ja5okmnT75gKdGVio5rwUqQtavftaa2uogYJT2KKTPvxKHpVTOfGHJHc+8NGMy/kG/0DCNYGyl+v/o4fLuIJxFuPLrPcv4B5SArpiqyGTG7oOVqojnE2DLAiE=
