@@ -162,7 +162,7 @@ def bind_api(**config):
                 try:
                     error_msg = self.api.parser.parse_error(resp.read())
                 except Exception:
-                    error_msg = "Twitter error response: status code = %s" % resp.status
+                    error_msg = "Chatwork error response: status code = %s" % resp.status_code
                 raise ChatpyError(error_msg, resp)
 
             # Parse the response payload
