@@ -3,7 +3,7 @@
 # See LICENSE for details.
 
 
-from chatpy.error import TweepError
+from chatpy.error import ChatpyError
 from chatpy.api import API
 
 
@@ -34,5 +34,5 @@ class TokenAuthHandler(AuthHandler):
             if user:
                 self.username = user.name
             else:
-                raise TweepError("Unable to get username, invalid token!")
+                raise ChatpyError("Unable to get username, invalid token!")
         return self.username

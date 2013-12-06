@@ -4,7 +4,7 @@
 
 from chatpy.models import ModelFactory
 from chatpy.utils import import_simplejson
-from chatpy.error import TweepError
+from chatpy.error import ChatpyError
 
 
 class Parser(object):
@@ -49,7 +49,7 @@ class JSONParser(Parser):
         try:
             json = self.json_lib.loads(payload)
         except Exception, e:
-            raise TweepError('Failed to parse JSON payload: %s' % e)
+            raise ChatpyError('Failed to parse JSON payload: %s' % e)
 
         needsCursors = method.parameters.has_key('cursor')
         if needsCursors and isinstance(json, dict) and 'previous_cursor' in json and 'next_cursor' in json:
@@ -77,7 +77,7 @@ class ModelParser(JSONParser):
             if method.payload_type is None: return
             model = getattr(self.model_factory, method.payload_type)
         except AttributeError:
-            raise TweepError('No model for this payload type: %s' % method.payload_type)
+            raise ChatpyError('No model for this payload type: %s' % method.payload_type)
 
         json = JSONParser.parse(self, method, payload)
         if isinstance(json, tuple):

@@ -9,7 +9,7 @@ import re
 from StringIO import StringIO
 import gzip
 
-from chatpy.error import TweepError
+from chatpy.error import ChatpyError
 from chatpy.utils import convert_to_utf8_str
 from chatpy.models import Model
 
@@ -32,7 +32,7 @@ def bind_api(**config):
             # If authentication is required and no credentials
             # are provided, throw an error.
             if self.require_auth and not api.auth:
-                raise TweepError('Authentication required!')
+                raise ChatpyError('Authentication required!')
 
             self.api = api
             self.post_data = kargs.pop('post_data', None)
@@ -68,13 +68,13 @@ def bind_api(**config):
                 try:
                     self.parameters[self.allowed_param[idx]] = convert_to_utf8_str(arg)
                 except IndexError:
-                    raise TweepError('Too many parameters supplied!')
+                    raise ChatpyError('Too many parameters supplied!')
 
             for k, arg in kargs.items():
                 if arg is None:
                     continue
                 if k in self.parameters:
-                    raise TweepError('Multiple values for parameter %s supplied!' % k)
+                    raise ChatpyError('Multiple values for parameter %s supplied!' % k)
 
                 self.parameters[k] = convert_to_utf8_str(arg)
 
@@ -89,7 +89,7 @@ def bind_api(**config):
                     try:
                         value = urllib.quote(self.parameters[name])
                     except KeyError:
-                        raise TweepError('No parameter value found for path variable: %s' % name)
+                        raise ChatpyError('No parameter value found for path variable: %s' % name)
                     del self.parameters[name]
 
                 self.path = self.path.replace(variable, value)
@@ -142,7 +142,7 @@ def bind_api(**config):
                     conn.request(self.method, url, headers=self.headers, body=self.post_data)
                     resp = conn.getresponse()
                 except Exception, e:
-                    raise TweepError('Failed to send request: %s' % e)
+                    raise ChatpyError('Failed to send request: %s' % e)
 
                 # Exit request loop if non-retry error code
                 if self.retry_errors:
@@ -161,7 +161,7 @@ def bind_api(**config):
                     error_msg = self.api.parser.parse_error(resp.read())
                 except Exception:
                     error_msg = "Twitter error response: status code = %s" % resp.status
-                raise TweepError(error_msg, resp)
+                raise ChatpyError(error_msg, resp)
 
             # Parse the response payload
             body = resp.read()
@@ -170,7 +170,7 @@ def bind_api(**config):
                     zipper = gzip.GzipFile(fileobj=StringIO(body))
                     body = zipper.read()
                 except Exception, e:
-                    raise TweepError('Failed to decompress data: %s' % e)
+                    raise ChatpyError('Failed to decompress data: %s' % e)
             result = self.api.parser.parse(self, body)
 
             conn.close()

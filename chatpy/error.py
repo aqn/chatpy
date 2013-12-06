@@ -3,7 +3,7 @@
 # See LICENSE for details.
 
 
-class TweepError(Exception):
+class ChatpyError(Exception):
     """Tweepy exception"""
 
     def __init__(self, reason, response=None):
