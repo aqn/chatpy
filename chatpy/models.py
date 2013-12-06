@@ -1,11 +1,12 @@
-# Tweepy
-# Copyright 2009-2010 Joshua Roesslein
+# Chatpy
+# Copyright 2013 aqn
 # See LICENSE for details.
 
 import datetime
 
+
 class ResultSet(list):
-    """A list like object that holds results from a Twitter API query."""
+    """A list like object that holds results from a Chatwork API query."""
     def __init__(self, max_id=None, since_id=None):
         super(ResultSet, self).__init__()
         self._max_id = max_id
@@ -76,10 +77,13 @@ class Task(Model):
         task = cls(api)
 
         for k, v in json.items():
-            if k == 'assigned_by_account':
+            if k in ('assigned_by_account', 'account'):
                 account_model = getattr(api.parser.model_factory, 'account')
-                assigned_by_account = account_model.parse(api, v)
-                setattr(task, k, assigned_by_account)
+                account = account_model.parse(api, v)
+                setattr(task, k,  account)
+            elif k == 'limit_time':
+                utc_time = datetime.datetime.utcfromtimestamp(v)
+                setattr(task, k, utc_time)
             else:
                 setattr(task, k, v)
         return task
@@ -98,6 +102,42 @@ class Room(Model):
             else:
                 setattr(room, k, v)
         return room
+
+    def post_message(self, **kwargs):
+        return self._api.post_message(room_id=self.room_id, **kwargs)
+
+
+class File(Model):
+
+    @classmethod
+    def parse(cls, api, json):
+        f = cls(api)
+
+        for k, v in json.items():
+
+            if k == 'account':
+                account_model = getattr(api.parser.model_factory, 'account')
+                account = account_model.parse(api, v)
+                setattr(f, k,  account)
+            elif k == 'upload_time':
+                utc_time = datetime.datetime.utcfromtimestamp(v)
+                setattr(f, k, utc_time)
+            else:
+                setattr(f, k, v)
+
+        return f
+
+
+class Message(Model):
+
+    @classmethod
+    def parse(cls, api, json):
+        message = cls(api)
+
+        for k, v in json.items():
+            setattr(message, k, v)
+
+        return message
 
 
 class Status(Model):
@@ -140,6 +180,8 @@ class ModelFactory(object):
     account = Account
     task = Task
     status = Status
+    message = Message
+    attachment = File
 
     json = JSONModel
     ids = IDModel

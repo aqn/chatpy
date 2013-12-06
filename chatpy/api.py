@@ -7,7 +7,7 @@ from chatpy.parsers import ModelParser
 
 
 class API(object):
-    """Twitter API"""
+    """Chatwork API"""
 
     def __init__(self, auth_handler=None,
                  host='api.chatwork.com',
@@ -44,6 +44,13 @@ class API(object):
         payload_type='task', payload_list=True,
     )
 
+    """ GET /contacts """
+    contacts = bind_api(
+        path='/contacts',
+        payload_type='account',
+        payload_list=True
+    )
+
     """ GET /rooms """
     rooms = bind_api(
         path='/rooms',
@@ -56,6 +63,17 @@ class API(object):
         payload_type='room',
         allowed_param=['room_id']
     )
+    # PUT /rooms/{room_id} (not implemented)
+    # DELETE/rooms/{room_id} (not implemented)
+    """ GET /rooms/{room_id}/members """
+    get_members = bind_api(
+        path='/rooms/{room_id}/members',
+        payload_type='account',
+        payload_list=True,
+        allowed_param=['room_id']
+    )
+    # PUT /rooms/{room_id}/members (not implemented)
+    # GET /rooms/{room_id}/messages (upstream not implemented)
 
     """ POST /rooms/{room_id}/messages """
     post_message = bind_api(
@@ -64,3 +82,33 @@ class API(object):
         allowed_param=['room_id', 'body']
     )
 
+    """ GET /rooms/{room_id}/tasks """
+    tasks = bind_api(
+        path='/rooms/{room_id}/tasks',
+        payload_type='task',
+        payload_list=True,
+        allowed_param=['room_id']
+    )
+
+    # POST /rooms/{room_id}/tasks (not implemented)
+
+    """ GET /rooms/{room_id}/tasks/{task_id} """
+    get_task = bind_api(
+        path='/rooms/{room_id}/tasks/{task_id}',
+        payload_type='task',
+        allowed_param=['room_id', 'task_id']
+    )
+    """ GET /rooms/{room_id}/files """
+    files = bind_api(
+        path='/rooms/{room_id}/files',
+        payload_type='attachment',
+        payload_list=True,
+        allowed_param=['room_id']
+    )
+
+    """ GET /rooms/{room_id}/files/{file_id} """
+    get_file = bind_api(
+        path='/rooms/{room_id}/files/{file_id}',
+        payload_type='attachment',
+        allowed_param=['room_id', 'file_id']
+    )

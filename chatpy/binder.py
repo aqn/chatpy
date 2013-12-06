@@ -7,10 +7,10 @@ import time
 import re
 
 import requests
-from requests.utils import to_native_string
 
 from chatpy.error import ChatpyError
 from chatpy.models import Model
+from chatpy.utils import convert_to_utf8_str
 
 re_path_template = re.compile('{\w+}')
 
@@ -65,7 +65,7 @@ def bind_api(**config):
                     continue
 
                 try:
-                    self.parameters[self.allowed_param[idx]] = to_native_string(arg, "utf8")
+                    self.parameters[self.allowed_param[idx]] = convert_to_utf8_str(arg)
                 except IndexError:
                     raise ChatpyError('Too many parameters supplied!')
 
@@ -75,7 +75,7 @@ def bind_api(**config):
                 if k in self.parameters:
                     raise ChatpyError('Multiple values for parameter %s supplied!' % k)
 
-                self.parameters[k] = to_native_string(arg, "utf8")
+                self.parameters[k] = convert_to_utf8_str(arg)
 
         def build_path(self):
             for variable in re_path_template.findall(self.path):
