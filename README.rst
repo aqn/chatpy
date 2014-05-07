@@ -7,9 +7,18 @@ Chatpy: Chatwork API for Python
 
 Chatpy is a `Chatwork API`_ Library which strongly inspired by Tweepy_.
 
-==============
+=============
+Installation
+=============
+
+::
+
+    $ pip install git+https://github.com/aqn/chatpy.git
+
+
+=============
 Supported API
-==============
+=============
 
 - Endpoint: /me
     - GET /me
