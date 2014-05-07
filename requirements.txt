@@ -1,2 +1,3 @@
 nose-cov
 requests
+mock
