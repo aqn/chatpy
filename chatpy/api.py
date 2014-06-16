@@ -90,7 +90,13 @@ class API(object):
         allowed_param=['room_id']
     )
 
-    # POST /rooms/{room_id}/tasks (not implemented)
+    """ POST /rooms/{room_id}/tasks """
+    post_tasks = bind_api(
+        path='/rooms/{room_id}/tasks',
+        method='POST',
+        payload_type='task',
+        allowed_param=['room_id', 'body', 'to_ids', 'limit']
+    )
 
     """ GET /rooms/{room_id}/tasks/{task_id} """
     get_task = bind_api(
