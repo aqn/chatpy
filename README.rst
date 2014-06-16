@@ -29,12 +29,12 @@ Supported API
     - GET /contacts
 - Endpoint: /rooms
     - GET /rooms
-    - POST /rooms (not implemented)
+    - POST /rooms
     - GET /rooms/{room_id}
-    - PUT /rooms/{room_id} (not implemented)
-    - DELETE/rooms/{room_id} (not implemented)
+    - PUT /rooms/{room_id}
+    - DELETE/rooms/{room_id}
     - GET /rooms/{room_id}/members
-    - PUT /rooms/{room_id}/members (not implemented)
+    - PUT /rooms/{room_id}/members
     - GET /rooms/{room_id}/messages (upstream not implemented)
     - POST /rooms/{room_id}/messages
     - GET /rooms/{room_id}/tasks
