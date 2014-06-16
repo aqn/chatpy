@@ -1,5 +1,5 @@
 # Tweepy
-# Copyright 2013 aqn
+# Copyright 2014 aqn
 # See LICENSE for details.
 
 import urllib
@@ -149,7 +149,7 @@ def bind_api(**config):
                     if resp.status_code not in self.retry_errors:
                         break
                 else:
-                    if resp.status_code == 200:
+                    if resp.status_code in (200, 204):
                         break
 
                 # Sleep before retrying request again
@@ -158,7 +158,7 @@ def bind_api(**config):
 
             # If an error was returned, throw an exception
             self.api.last_response = resp
-            if resp.status_code != 200:
+            if resp.status_code not in (200, 204):
                 try:
                     error_msg = self.api.parser.parse_error(resp.read())
                 except Exception:
@@ -174,7 +174,6 @@ def bind_api(**config):
                 self.api.cache.store(url, result)
 
             return result
-
 
     def _call(api, *args, **kargs):
 

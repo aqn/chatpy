@@ -57,14 +57,35 @@ class API(object):
         payload_type='room', payload_list=True,
     )
 
+    """ POST /rooms """
+    create_room = bind_api(
+        path='/rooms',
+        method='POST',
+        allowed_param=['description', 'icon_preset', 'members_admin_ids', 'members_member_ids', 'members_readonly_ids',
+                       'name']
+    )
+
     """ GET /rooms/{room_id} """
     get_room = bind_api(
         path='/rooms/{room_id}',
         payload_type='room',
         allowed_param=['room_id']
     )
-    # PUT /rooms/{room_id} (not implemented)
-    # DELETE/rooms/{room_id} (not implemented)
+
+    """ PUT /rooms/{room_id} """
+    change_room = bind_api(
+        path='/rooms/{room_id}',
+        method='PUT',
+        allowed_param=['description', 'icon_preset', 'name']
+    )
+
+    """ DELETE/rooms/{room_id} """
+    delete_room = bind_api(
+        path='/rooms/{room_id}',
+        method='DELETE',
+        allowed_param=["room_id", "action_type"]
+    )
+
     """ GET /rooms/{room_id}/members """
     get_members = bind_api(
         path='/rooms/{room_id}/members',
@@ -72,7 +93,13 @@ class API(object):
         payload_list=True,
         allowed_param=['room_id']
     )
-    # PUT /rooms/{room_id}/members (not implemented)
+    """ PUT /rooms/{room_id}/members """
+    change_room_members = bind_api(
+        path='/rooms/{room_id}/members',
+        method='PUT',
+        allowed_param=['members_admin_ids', 'members_member_ids', 'members_readonly_ids']
+    )
+
     # GET /rooms/{room_id}/messages (upstream not implemented)
 
     """ POST /rooms/{room_id}/messages """
@@ -83,7 +110,7 @@ class API(object):
     )
 
     """ GET /rooms/{room_id}/tasks """
-    tasks = bind_api(
+    room_tasks = bind_api(
         path='/rooms/{room_id}/tasks',
         payload_type='task',
         payload_list=True,
