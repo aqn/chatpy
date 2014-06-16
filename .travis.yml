@@ -6,4 +6,4 @@ install: pip install -r requirements.txt
 script: nosetests -v -w tests/  --with-cov --cov chatpy --cov-report term-missing
 env:
   global:
-    secure: EmebfaDFtjmg/AQjI4d6h19DCKfoqjajsXqr0tCunqcbcjvV+1Ja5okmnT75gKdGVio5rwUqQtavftaa2uogYJT2KKTPvxKHpVTOfGHJHc+8NGMy/kG/0DCNYGyl+v/o4fLuIJxFuPLrPcv4B5SArpiqyGTG7oOVqojnE2DLAiE=
+  - secure: VmZrITJBKXz1muzsjmMdSX9eX+7rA9frGjXflo2U/KBsJmjvTTXx2RKWYN+UcYJ4IAXnFOq0nOkMjsexChq2Y+PtgnC9su0f69X1bwLU8HqBu795DTW7sWwANEimVjcpo9qdxgNDbTFHsm/gZ97TBr4+JYwk7A+RbD3rnJgaU/w=
