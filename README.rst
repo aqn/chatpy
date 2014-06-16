@@ -38,7 +38,7 @@ Supported API
     - GET /rooms/{room_id}/messages (upstream not implemented)
     - POST /rooms/{room_id}/messages
     - GET /rooms/{room_id}/tasks
-    - POST /rooms/{room_id}/tasks (not implemented)
+    - POST /rooms/{room_id}/tasks
     - GET /rooms/{room_id}/tasks/{task_id}
     - GET /rooms/{room_id}/files
     - GET /rooms/{room_id}/files/{file_id}
