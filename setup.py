@@ -1,9 +1,11 @@
 from setuptools import setup
 from pip.req import parse_requirements
+from pip.download import PipSession
+
 
 long_desc = file("README.rst").read()
 
-install_reqs = parse_requirements('requirements.txt')
+install_reqs = parse_requirements('requirements.txt', session=PipSession())
 reqs = [str(ir.req) for ir in install_reqs]
 
 setup(
