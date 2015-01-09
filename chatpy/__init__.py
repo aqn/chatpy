@@ -1,11 +1,11 @@
 # chatpy
-# Copyright 2013 aqn
+# Copyright 2013-2015 aqn
 # See LICENSE for details.
 
 """
 Chatwork API library
 """
-__version__ = '0.1'
+__version__ = '0.2.0'
 __license__ = 'MIT'
 
 from chatpy.models import Status, ModelFactory

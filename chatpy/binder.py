@@ -1,5 +1,5 @@
-# Tweepy
-# Copyright 2014 aqn
+# Chatpy
+# Copyright 2014-2015 aqn
 # See LICENSE for details.
 
 import urllib

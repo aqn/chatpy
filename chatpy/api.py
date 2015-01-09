@@ -1,5 +1,5 @@
 # Chatpy
-# Copyright 2013 aqn
+# Copyright 2013-2015 aqn
 # See LICENSE for details.
 
 from chatpy.binder import bind_api

@@ -1,10 +1,10 @@
-# Tweepy
-# Copyright 2009-2010 Joshua Roesslein
+# Chatpy
+# Copyright 2013-2015 aqn
 # See LICENSE for details.
 
 
 class ChatpyError(Exception):
-    """Tweepy exception"""
+    """Chatpy exception"""
 
     def __init__(self, reason, response=None):
         self.reason = unicode(reason)
