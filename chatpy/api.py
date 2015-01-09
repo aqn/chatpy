@@ -100,7 +100,14 @@ class API(object):
         allowed_param=['members_admin_ids', 'members_member_ids', 'members_readonly_ids']
     )
 
-    # GET /rooms/{room_id}/messages (upstream not implemented)
+    """ GET /rooms/{room_id}/messages """
+    messages = bind_api(
+        path='/rooms/{room_id}/messages',
+        method='GET',
+        allowed_param=['force'],
+        payload_type='message',
+        payload_list=True
+    )
 
     """ POST /rooms/{room_id}/messages """
     post_message = bind_api(

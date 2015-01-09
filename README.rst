@@ -35,7 +35,7 @@ Supported API
     - DELETE/rooms/{room_id}
     - GET /rooms/{room_id}/members
     - PUT /rooms/{room_id}/members
-    - GET /rooms/{room_id}/messages (upstream not implemented)
+    - GET /rooms/{room_id}/messages
     - POST /rooms/{room_id}/messages
     - GET /rooms/{room_id}/tasks
     - POST /rooms/{room_id}/tasks
