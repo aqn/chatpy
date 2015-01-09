@@ -3,6 +3,7 @@
 # See LICENSE for details.
 
 import datetime
+from chatpy.utils import convert_to_utf8_str
 
 
 class ResultSet(list):
@@ -69,6 +70,31 @@ class Account(Model):
             setattr(account, k, v)
         return account
 
+    @property
+    def room(self):
+        return self._api.get_room(room_id=self.room_id)
+
+    @property
+    def contacts(self):
+        return self._api.contacts()
+
+    def __repr__(self):
+        return "Account(id={:d}, name={})".format(self.account_id, convert_to_utf8_str(self.name))
+
+
+class MyAccount(Account):
+
+    @property
+    def tasks(self):
+        return self._api.tasks()
+
+    @property
+    def status(self):
+        return self._api.status()
+
+    def __repr__(self):
+        return "MyAccount(id={:d}, name={})".format(self.account_id, convert_to_utf8_str(self.name))
+
 
 class Task(Model):
 
@@ -88,6 +114,10 @@ class Task(Model):
                 setattr(task, k, v)
         return task
 
+    def __repr__(self):
+        text = ' '.join(self.body.split('\n'))
+        return "Task(id={:d}, body={})".format(self.task_id, convert_to_utf8_str(text[0:20]))
+
 
 class Room(Model):
 
@@ -103,8 +133,25 @@ class Room(Model):
                 setattr(room, k, v)
         return room
 
-    def post_message(self, **kwargs):
-        return self._api.post_message(room_id=self.room_id, **kwargs)
+    def messages(self, **kwargs):
+        return self._api.messages(room_id=self.room_id, **kwargs)
+
+    def post_message(self, body, **kwargs):
+        return self._api.post_message(room_id=self.room_id, body=body, **kwargs)
+
+    def destroy(self, **kwargs):
+        return self._api.delete_room(room_id=self.room_id, **kwargs)
+
+    @property
+    def tasks(self):
+        return self._api.room_tasks(room_id=self.room_id)
+
+    @property
+    def files(self):
+        return  self._api.files(room_id=self.room_id)
+
+    def __repr__(self):
+        return "Room(id={:d}, name={})".format(self.room_id, convert_to_utf8_str(self.name))
 
 
 class File(Model):
@@ -127,6 +174,9 @@ class File(Model):
 
         return f
 
+    def __repr__(self):
+        return "File(id={:d}, name={})".format(self.file_id, convert_to_utf8_str(self.filename))
+
 
 class Message(Model):
 
@@ -138,6 +188,10 @@ class Message(Model):
             setattr(message, k, v)
 
         return message
+
+    def __repr__(self):
+        text = ' '.join(self.body.split('\n'))
+        return "Message(id={:d}, body={})".format(self.message_id, convert_to_utf8_str(text[0:20]))
 
 
 class Status(Model):
@@ -178,6 +232,7 @@ class ModelFactory(object):
 
     room = Room
     account = Account
+    my_account = MyAccount
     task = Task
     status = Status
     message = Message

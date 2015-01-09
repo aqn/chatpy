@@ -29,7 +29,7 @@ class API(object):
     """ GET /me """
     me = bind_api(
         path='/me',
-        payload_type='account'
+        payload_type='my_account'
     )
 
     """ GET /my/status """
