@@ -13,7 +13,7 @@ Installation
 
 ::
 
-    $ pip install git+https://github.com/aqn/chatpy.git
+    $ pip install chatpy
 
 
 =============

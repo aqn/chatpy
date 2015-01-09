@@ -2,13 +2,11 @@ try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
-from pip.req import parse_requirements
-from pip.download import PipSession
 
 from chatpy import __version__
 
-install_reqs = parse_requirements('requirements.txt', session=PipSession())
-reqs = [str(ir.req) for ir in install_reqs]
+with open('README.rst') as f:
+    long_description = f.read()
 
 setup(
     name='chatpy',
@@ -19,7 +17,18 @@ setup(
     author='aqn',
     author_email='aqn000 at gmail.com',
     description='Chatwork API for Python',
-    long_description=file("README.rst").read(),
+    long_description=long_description,
     install_requires=['requests'],
-    zip_safe=False
+    keywords="chatwork library",
+    classifiers=[
+          'Development Status :: 3 - Alpha',
+          'Topic :: Software Development :: Libraries',
+          'License :: OSI Approved :: MIT License',
+          'Operating System :: OS Independent',
+          'Programming Language :: Python',
+          'Programming Language :: Python :: 2',
+          'Programming Language :: Python :: 2.6',
+          'Programming Language :: Python :: 2.7',
+    ],
+    zip_safe=True
 )
