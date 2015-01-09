@@ -166,8 +166,12 @@ def bind_api(**config):
                 raise ChatpyError(error_msg, resp)
 
             # Parse the response payload
+            text = resp.text
+            if resp.status_code == 204:
+                # empty list
+                text = "{}"
 
-            result = self.api.parser.parse(self, resp.text)
+            result = self.api.parser.parse(self, text)
 
             # Store result into cache if one is available.
             if self.use_cache and self.api.cache and self.method == 'GET' and result:
