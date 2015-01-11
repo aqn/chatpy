@@ -19,7 +19,6 @@ api = API()
 
 
 def debug(level=1):
-
-    import httplib
-    httplib.HTTPConnection.debuglevel = level
+    from six.moves import http_client
+    http_client.HTTPConnection.debuglevel = level
 

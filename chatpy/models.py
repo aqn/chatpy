@@ -78,9 +78,6 @@ class Account(Model):
     def contacts(self):
         return self._api.contacts()
 
-    def __repr__(self):
-        return "Account(id={:d}, name={})".format(self.account_id, convert_to_utf8_str(self.name))
-
 
 class MyAccount(Account):
 
@@ -91,9 +88,6 @@ class MyAccount(Account):
     @property
     def status(self):
         return self._api.status()
-
-    def __repr__(self):
-        return "MyAccount(id={:d}, name={})".format(self.account_id, convert_to_utf8_str(self.name))
 
 
 class Task(Model):
@@ -150,8 +144,6 @@ class Room(Model):
     def files(self):
         return  self._api.files(room_id=self.room_id)
 
-    def __repr__(self):
-        return "Room(id={:d}, name={})".format(self.room_id, convert_to_utf8_str(self.name))
 
 
 class File(Model):
@@ -174,9 +166,6 @@ class File(Model):
 
         return f
 
-    def __repr__(self):
-        return "File(id={:d}, name={})".format(self.file_id, convert_to_utf8_str(self.filename))
-
 
 class Message(Model):
 
@@ -188,10 +177,6 @@ class Message(Model):
             setattr(message, k, v)
 
         return message
-
-    def __repr__(self):
-        text = ' '.join(self.body.split('\n'))
-        return "Message(id={:d}, body={})".format(self.message_id, convert_to_utf8_str(text[0:20]))
 
 
 class Status(Model):
