@@ -1,5 +1,6 @@
 # Chatpy
-# Copyright 2014-2015 aqn
+# Copyright 2013-2015 aqn
+# the original source code is written by Joshua Roesslein (Tweepy)
 # See LICENSE for details.
 
 from six.moves.urllib.parse import quote

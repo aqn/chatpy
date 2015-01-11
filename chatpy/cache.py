@@ -1,5 +1,6 @@
-# Tweepy
-# Copyright 2009-2010 Joshua Roesslein
+# Chatpy
+# Copyright 2013-2015 aqn
+# the original source code is written by Joshua Roesslein
 # See LICENSE for details.
 
 import time

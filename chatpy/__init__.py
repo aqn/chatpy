@@ -1,5 +1,6 @@
 # chatpy
 # Copyright 2013-2015 aqn
+# the original source code is written by Joshua Roesslein (Tweepy)
 # See LICENSE for details.
 
 """
