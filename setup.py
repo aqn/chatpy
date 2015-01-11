@@ -5,14 +5,12 @@ try:
 except ImportError:
     from distutils.core import setup
 
-from chatpy import __version__
-
 with io.open('README.rst') as f:
     long_description = f.read()
 
 setup(
     name='chatpy',
-    version=__version__,
+    version='0.2.1',
     packages=['chatpy'],
     url='https://github.com/aqn/chatpy',
     license='MIT',
