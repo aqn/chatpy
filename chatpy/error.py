@@ -3,12 +3,14 @@
 # the original source code is written by Joshua Roesslein (Tweepy)
 # See LICENSE for details.
 
+import six
+
 
 class ChatpyError(Exception):
     """Chatpy exception"""
 
     def __init__(self, reason, response=None):
-        self.reason = unicode(reason)
+        self.reason = six.text_type(reason)
         self.response = response
         Exception.__init__(self, reason)
 
