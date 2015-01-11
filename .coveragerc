@@ -1,0 +1,7 @@
+[run]
+source = chatpy
+
+[report]
+omit =
+  */python?.?/*
+  */site-packages/*

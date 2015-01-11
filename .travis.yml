@@ -11,3 +11,6 @@ script: nosetests -v -w tests/  --with-cov --cov chatpy --cov-report term-missin
 env:
   global:
   - secure: VmZrITJBKXz1muzsjmMdSX9eX+7rA9frGjXflo2U/KBsJmjvTTXx2RKWYN+UcYJ4IAXnFOq0nOkMjsexChq2Y+PtgnC9su0f69X1bwLU8HqBu795DTW7sWwANEimVjcpo9qdxgNDbTFHsm/gZ97TBr4+JYwk7A+RbD3rnJgaU/w=
+
+after_success:
+  - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then coveralls; fi
