@@ -10,13 +10,13 @@ with io.open('README.rst') as f:
 
 setup(
     name='chatpy',
-    version='0.2.1',
+    version='0.2.2',
     packages=['chatpy'],
     url='https://github.com/aqn/chatpy',
     license='MIT',
     author='aqn',
     author_email='aqn000 at gmail.com',
-    description='Chatwork API for Python',
+    description='ChatWork API for Python',
     long_description=long_description,
     install_requires=['requests', 'six'],
     keywords="chatwork library",
