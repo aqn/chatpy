@@ -1,8 +1,9 @@
 # Chatpy
-# Copyright 2014-2015 aqn
+# Copyright 2013-2015 aqn
+# the original source code is written by Joshua Roesslein (Tweepy)
 # See LICENSE for details.
 
-import urllib
+from six.moves.urllib.parse import quote
 import time
 import re
 
@@ -86,7 +87,7 @@ def bind_api(**config):
                     value = self.api.auth.get_username()
                 else:
                     try:
-                        value = urllib.quote(self.parameters[name])
+                        value = quote(self.parameters[name])
                     except KeyError:
                         raise ChatpyError('No parameter value found for path variable: %s' % name)
                     del self.parameters[name]

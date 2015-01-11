@@ -1,5 +1,6 @@
-# Tweepy
-# Copyright 2009-2010 Joshua Roesslein
+# Chatpy
+# Copyright 2013-2015 aqn
+# the original source code is written by Joshua Roesslein (Tweepy)
 # See LICENSE for details.
 
 from chatpy.models import ModelFactory
@@ -48,11 +49,11 @@ class JSONParser(Parser):
     def parse(self, method, payload):
         try:
             json = self.json_lib.loads(payload)
-        except Exception, e:
+        except Exception as e:
             raise ChatpyError('Failed to parse JSON payload: %s' % e)
 
-        needsCursors = method.parameters.has_key('cursor')
-        if needsCursors and isinstance(json, dict) and 'previous_cursor' in json and 'next_cursor' in json:
+        needs_cursors = 'cursor' in method.parameters
+        if needs_cursors and isinstance(json, dict) and 'previous_cursor' in json and 'next_cursor' in json:
             cursors = json['previous_cursor'], json['next_cursor']
             return json, cursors
         else:
@@ -60,7 +61,7 @@ class JSONParser(Parser):
 
     def parse_error(self, payload):
         error = self.json_lib.loads(payload)
-        if error.has_key('error'):
+        if 'error' in error:
             return error['error']
         else:
             return error['errors']
@@ -94,4 +95,3 @@ class ModelParser(JSONParser):
             return result, cursors
         else:
             return result
-

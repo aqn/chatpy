@@ -1,16 +1,16 @@
+import io
+
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
 
-from chatpy import __version__
-
-with open('README.rst') as f:
+with io.open('README.rst') as f:
     long_description = f.read()
 
 setup(
     name='chatpy',
-    version=__version__,
+    version='0.2.1',
     packages=['chatpy'],
     url='https://github.com/aqn/chatpy',
     license='MIT',
@@ -18,7 +18,7 @@ setup(
     author_email='aqn000 at gmail.com',
     description='Chatwork API for Python',
     long_description=long_description,
-    install_requires=['requests'],
+    install_requires=['requests', 'six'],
     keywords="chatwork library",
     classifiers=[
           'Development Status :: 3 - Alpha',

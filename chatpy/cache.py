@@ -1,9 +1,10 @@
-# Tweepy
-# Copyright 2009-2010 Joshua Roesslein
+# Chatpy
+# Copyright 2013-2015 aqn
+# the original source code is written by Joshua Roesslein
 # See LICENSE for details.
 
+from __future__ import print_function
 import time
-import datetime
 import threading
 import os
 
@@ -155,7 +156,7 @@ class FileCache(Cache):
             self._lock_file = self._lock_file_win32
             self._unlock_file = self._unlock_file_win32
         else:
-            print 'Warning! FileCache locking not supported on this system!'
+            print('Warning! FileCache locking not supported on this system!')
             self._lock_file = self._lock_file_dummy
             self._unlock_file = self._unlock_file_dummy
 
@@ -267,6 +268,7 @@ class FileCache(Cache):
                 continue
             self._delete_file(os.path.join(self.cache_dir, entry))
 
+
 class MemCacheCache(Cache):
     """Cache interface"""
 
@@ -303,122 +305,3 @@ class MemCacheCache(Cache):
     def flush(self):
         """Delete all cached entries. NO-OP"""
         raise NotImplementedError
-
-class RedisCache(Cache):
-    '''Cache running in a redis server'''
-
-    def __init__(self, client, timeout=60, keys_container = 'tweepy:keys', pre_identifier = 'tweepy:'):
-        Cache.__init__(self, timeout)
-        self.client = client
-        self.keys_container = keys_container
-        self.pre_identifier = pre_identifier
-
-    def _is_expired(self, entry, timeout):
-        # Returns true if the entry has expired
-        return timeout > 0 and (time.time() - entry[0]) >= timeout
-
-    def store(self, key, value):
-        '''Store the key, value pair in our redis server'''
-        # Prepend tweepy to our key, this makes it easier to identify tweepy keys in our redis server
-        key = self.pre_identifier + key
-        # Get a pipe (to execute several redis commands in one step)
-        pipe = self.client.pipeline()
-        # Set our values in a redis hash (similar to python dict)
-        pipe.set(key, pickle.dumps((time.time(), value)))
-        # Set the expiration
-        pipe.expire(key, self.timeout)
-        # Add the key to a set containing all the keys
-        pipe.sadd(self.keys_container, key)
-        # Execute the instructions in the redis server
-        pipe.execute()
-
-    def get(self, key, timeout=None):
-        '''Given a key, returns an element from the redis table'''
-        key = self.pre_identifier + key
-        # Check to see if we have this key
-        unpickled_entry = self.client.get(key)
-        if not unpickled_entry:
-            # No hit, return nothing
-            return None
-
-        entry = pickle.loads(unpickled_entry)
-        # Use provided timeout in arguments if provided
-        # otherwise use the one provided during init.
-        if timeout is None:
-            timeout = self.timeout
-
-        # Make sure entry is not expired
-        if self._is_expired(entry, timeout):
-            # entry expired, delete and return nothing
-            self.delete_entry(key)
-            return None
-        # entry found and not expired, return it
-        return entry[1]
-
-    def count(self):
-        '''Note: This is not very efficient, since it retreives all the keys from the redis
-        server to know how many keys we have'''
-        return len(self.client.smembers(self.keys_container))
-
-    def delete_entry(self, key):
-        '''Delete an object from the redis table'''
-        pipe = self.client.pipeline()
-        pipe.srem(self.keys_container, key)
-        pipe.delete(key)
-        pipe.execute()
-
-    def cleanup(self):
-        '''Cleanup all the expired keys'''
-        keys = self.client.smembers(self.keys_container)
-        for key in keys:
-            entry = self.client.get(key)
-            if entry:
-                entry = pickle.loads(entry)
-                if self._is_expired(entry, self.timeout):
-                    self.delete_entry(key)
-
-    def flush(self):
-        '''Delete all entries from the cache'''
-        keys = self.client.smembers(self.keys_container)
-        for key in keys:
-            self.delete_entry(key)
-
-
-class MongodbCache(Cache):
-    """A simple pickle-based MongoDB cache sytem."""
-
-    def __init__(self, db, timeout=3600, collection='tweepy_cache'):
-        """Should receive a "database" cursor from pymongo."""
-        Cache.__init__(self, timeout)
-        self.timeout = timeout
-        self.col = db[collection]
-        self.col.create_index('created', expireAfterSeconds=timeout)
-
-    def store(self, key, value):
-        from bson.binary import Binary
-
-        now = datetime.datetime.utcnow()
-        blob = Binary(pickle.dumps(value))
-
-        self.col.insert({'created': now, '_id': key, 'value': blob})
-
-    def get(self, key, timeout=None):
-        if timeout:
-            raise NotImplementedError
-        obj = self.col.find_one({'_id': key})
-        if obj:
-            return pickle.loads(obj['value'])
-
-    def count(self):
-        return self.col.find({}).count()
-
-    def delete_entry(self, key):
-        return self.col.remove({'_id': key})
-
-    def cleanup(self):
-        """MongoDB will automatically clear expired keys."""
-        pass
-
-    def flush(self):
-        self.col.drop()
-        self.col.create_index('created', expireAfterSeconds=self.timeout)

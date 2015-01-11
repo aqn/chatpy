@@ -1,5 +1,6 @@
 # chatpy
 # Copyright 2013-2015 aqn
+# the original source code is written by Joshua Roesslein (Tweepy)
 # See LICENSE for details.
 
 """
@@ -19,7 +20,6 @@ api = API()
 
 
 def debug(level=1):
-
-    import httplib
-    httplib.HTTPConnection.debuglevel = level
+    from six.moves import http_client
+    http_client.HTTPConnection.debuglevel = level
 

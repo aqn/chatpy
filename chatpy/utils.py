@@ -1,6 +1,9 @@
 # Chatpy
-# Copyright 2013 aqn
+# Copyright 2013-2015 aqn
+# the original source code is written by Joshua Roesslein (Tweepy)
 # See LICENSE for details.
+import six
+
 
 def import_simplejson():
     try:
@@ -18,9 +21,7 @@ def import_simplejson():
 
 
 def convert_to_utf8_str(arg):
-    # written by Michael Norton (http://docondev.blogspot.com/)
-    if isinstance(arg, unicode):
-        arg = arg.encode('utf-8')
-    elif not isinstance(arg, str):
-        arg = str(arg)
+    if isinstance(arg, six.text_type):
+        return arg
+    arg = six.text_type(arg).encode('utf-8')
     return arg
