@@ -6,7 +6,7 @@
 """
 Chatwork API library
 """
-__version__ = '0.2.2'
+__version__ = '0.3.0'
 __license__ = 'MIT'
 
 from chatpy.models import Status, ModelFactory
